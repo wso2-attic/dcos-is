@@ -1,0 +1,63 @@
+{
+  "id": "wso2/is",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 2048,
+  "disk": 0,
+  "instances": 1,
+  "acceptedResourceRoles": [
+    "*"
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "forcePullImage": false,
+      "image": "wso2is:5.4.1",
+      "parameters": [],
+      "privileged": false
+    },
+    "portMappings": [
+      {
+        "containerPort": 9763,
+        "hostPort": 0,
+        "labels": {
+          "VIP_0": "/wso2/is:9763"
+        },
+        "name": "servlet-http",
+        "protocol": "tcp",
+        "servicePort": 9763
+      },
+      {
+        "containerPort": 9443,
+        "hostPort": 0,
+        "labels": {
+          "VIP_0": "/wso2/is:9443"
+        },
+        "name": "servlet-https",
+        "protocol": "tcp",
+        "servicePort": 9443
+      }
+    ]
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
+      "maxConsecutiveFailures": 3,
+      "portIndex": 0,
+      "protocol": "TCP",
+      "timeoutSeconds": 20,
+      "delaySeconds": 15
+    }
+  ],
+  "labels": {
+    "HAPROXY_GROUP": "external",
+    "HAPROXY_1_VHOST": "wso2is",
+    "HAPROXY_1_BACKEND_SERVER_OPTIONS": "server {serverName} {host_ipv4}:{port} {cookieOptions} check inter 5s ssl verify none"
+  },
+  "networks": [
+    {
+      "mode": "container/bridge"
+    }
+  ]
+}
