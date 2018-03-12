@@ -1,5 +1,5 @@
 {
-  "id": "identity-server-1",
+  "id": "identity-server-2",
   "container": {
     "type": "DOCKER",
     "docker": {
@@ -9,7 +9,7 @@
         { "protocol": "tcp",
           "hostPort": 0,
           "labels": {
-            "VIP_0": "/identity-server-1:9763"
+            "VIP_0": "/identity-server-2:9763"
           },
           "containerPort": 9763,
           "servicePort": 9763
@@ -17,7 +17,7 @@
         { "protocol": "tcp",
           "hostPort": 0,
           "labels": {
-            "VIP_0": "/identity-server-1:9443"
+            "VIP_0": "/identity-server-2:9443"
           },
           "containerPort": 9443,
           "servicePort": 9443
@@ -28,7 +28,7 @@
     "volumes": [
       {
         "containerPath": "/home/wso2carbon/volumes/",
-        "hostPath": "/volumes/wso2/identity-server-1/",
+        "hostPath": "/volumes/wso2/identity-server-2/",
         "mode": "RW"
       }
     ]
