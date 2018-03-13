@@ -39,18 +39,18 @@ ARG WSO2_SERVER_HOME=${USER_HOME}/${WSO2_SERVER}-${WSO2_SERVER_VERSION}
 
 # install required packages
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-install-suggests \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     curl && \
     rm -rf /var/lib/apt/lists/*
 
 # create a user group and a user
 RUN groupadd --system -g ${USER_GROUP_ID} ${USER_GROUP} && \
-    useradd --system --create-home --home-dir ${USER_HOME} --no-log-init -g ${USER_GROUP_ID} -u ${USER_ID} ${USER}
+    useradd --system --create-home --home-dir ${USER_HOME} -g ${USER_GROUP_ID} -u ${USER_ID} ${USER}
 
-# copy the jdk and wso2 product distributions to user's home directory and copy the mysql connector jar to server distribution
+# copy the jdk and wso2 product distributions to user's home directory
 COPY --chown=wso2carbon:wso2 ${FILES}/${JDK} ${USER_HOME}/java
 COPY --chown=wso2carbon:wso2 ${FILES}/${WSO2_SERVER_PACK}/ ${USER_HOME}/${WSO2_SERVER_PACK}/
-COPY --chown=wso2carbon:wso2 ${FILES}/mysql-connector-java-*-bin.jar ${USER_HOME}/${WSO2_SERVER_PACK}/repository/components/lib/
+COPY --chown=wso2carbon:wso2 ${FILES}/init.sh ${USER_HOME}/
 
 # set the user and work directory
 USER ${USER_ID}
@@ -59,9 +59,10 @@ WORKDIR ${USER_HOME}
 # set environment variables
 ENV JAVA_HOME=${JAVA_HOME} \
     PATH=$JAVA_HOME/bin:$PATH \
-    WSO2_SERVER_HOME=${WSO2_SERVER_HOME}
+    WORKDIR=${USER_HOME} \
+    CLUSTERING_ENABLED=false
 
 # expose ports
-EXPOSE 4000 9763 9443 
+EXPOSE 4000 9763 9443
 
-ENTRYPOINT ${WSO2_SERVER_HOME}/bin/wso2server.sh
+ENTRYPOINT ${WORKDIR}/init.sh

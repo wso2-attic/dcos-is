@@ -1,0 +1,56 @@
+{
+  "id": "identity-server-2",
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "wso2is:5.4.1",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/identity-server-2:9763"
+          },
+          "containerPort": 9763,
+          "servicePort": 9763
+        },
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/identity-server-2:9443"
+          },
+          "containerPort": 9443,
+          "servicePort": 9443
+        }
+      ],
+      "forcePullImage": false
+    },
+    "volumes": [
+      {
+        "containerPath": "/home/wso2carbon/volumes/",
+        "hostPath": "/volumes/wso2/identity-server-2/",
+        "mode": "RW"
+      }
+    ]
+  },
+  "env": {
+    "CLUSTERING_ENABLED": "true"
+  },
+  "instances": 1,
+  "cpus": 2,
+  "mem": 2048,
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 200,
+      "portIndex": 0,
+      "protocol": "TCP"
+    }
+  ],
+  "labels":{
+    "HAPROXY_GROUP":"external",
+    "HAPROXY_1_VHOST": "wso2is",
+    "HAPROXY_1_BACKEND_SERVER_OPTIONS": "server {serverName} {host_ipv4}:{port} {cookieOptions} check inter 5s ssl verify none",
+    "HAPROXY_1_BACKEND_STICKY_OPTIONS": "cookie JSESSIONID prefix nocache \n",
+    "HAPROXY_1_STICKY": "true"
+  }
+}

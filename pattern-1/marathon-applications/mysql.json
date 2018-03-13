@@ -18,11 +18,6 @@
         "type": "DOCKER",
         "volumes": [
             {
-                "containerPath": "/var/lib/mysql/",
-                "hostPath": "/volumes/wso2/mysql-data",
-                "mode": "RW"
-            },
-            {
                 "containerPath": "/docker-entrypoint-initdb.d/",
                 "hostPath": "/volumes/wso2/mysql-scripts",
                 "mode": "RW"
