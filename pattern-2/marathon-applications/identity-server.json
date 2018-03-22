@@ -1,0 +1,52 @@
+{
+  "id": "wso2is",
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "wso2is:5.4.1",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/wso2is:9763"
+          },
+          "containerPort": 9763,
+          "servicePort": 9763
+        },
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/wso2is:9443"
+          },
+          "containerPort": 9443,
+          "servicePort": 9443
+        }
+      ],
+      "forcePullImage": false
+    },
+    "volumes": [
+      {
+        "containerPath": "/home/wso2carbon/volumes/",
+        "hostPath": "/volumes/wso2/identity-server/",
+        "mode": "RW"
+      }
+    ]
+  },
+  "env": {
+    "CLUSTERING_ENABLED": "false"
+  },
+  "instances": 1,
+  "cpus": 2,
+  "mem": 2048,
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 200,
+      "portIndex": 0,
+      "protocol": "TCP"
+    }
+  ],
+  "labels":{
+    "HAPROXY_GROUP":"external"
+  }
+}

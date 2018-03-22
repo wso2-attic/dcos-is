@@ -17,7 +17,7 @@
 # ------------------------------------------------------------------------
 set -e
 
-wso2_server=wso2is
+wso2_server=wso2is-analytics
 wso2_server_version=5.4.1
 
 user=wso2carbon

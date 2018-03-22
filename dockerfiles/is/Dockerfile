@@ -40,7 +40,11 @@ ARG WSO2_SERVER_HOME=${USER_HOME}/${WSO2_SERVER}-${WSO2_SERVER_VERSION}
 # install required packages
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    curl && \
+    curl \
+    netcat \
+    inetutils-traceroute \
+    iproute2 \
+    telnet && \
     rm -rf /var/lib/apt/lists/*
 
 # create a user group and a user
@@ -52,7 +56,7 @@ COPY --chown=wso2carbon:wso2 ${FILES}/${JDK} ${USER_HOME}/java
 COPY --chown=wso2carbon:wso2 ${FILES}/${WSO2_SERVER_PACK}/ ${USER_HOME}/${WSO2_SERVER_PACK}/
 COPY --chown=wso2carbon:wso2 ${FILES}/init.sh ${USER_HOME}/
 
-# set the user and work directory
+# set the user and working directory
 USER ${USER_ID}
 WORKDIR ${USER_HOME}
 

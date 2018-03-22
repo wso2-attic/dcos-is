@@ -1,0 +1,68 @@
+{
+  "id": "wso2is-analytics",
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "wso2is-analytics:5.4.1",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/wso2is-analytics:9764"
+          },
+          "containerPort": 9764,
+          "servicePort": 9764
+        },
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/wso2is-analytics:9444"
+          },
+          "containerPort": 9444,
+          "servicePort": 9444
+        },
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/wso2is-analytics:7612"
+          },
+          "containerPort": 7612,
+          "servicePort": 7612
+        },
+        { "protocol": "tcp",
+          "hostPort": 0,
+          "labels": {
+            "VIP_0": "/wso2is-analytics:7712"
+          },
+          "containerPort": 7712,
+          "servicePort": 7712
+        }
+      ],
+      "forcePullImage": false
+    },
+    "volumes": [
+      {
+        "containerPath": "/home/wso2carbon/volumes/",
+        "hostPath": "/volumes/wso2/identity-server-analytics/",
+        "mode": "RW"
+      }
+    ]
+  },
+  "env": {
+    "CLUSTERING_ENABLED": "false"
+  },
+  "instances": 1,
+  "cpus": 2,
+  "mem": 2048,
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 200,
+      "portIndex": 0,
+      "protocol": "TCP"
+    }
+  ],
+  "labels":{
+    "HAPROXY_GROUP":"external"
+  }
+}
